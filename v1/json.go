@@ -1,4 +1,4 @@
-package cache
+package gormcache
 
 import (
 	"encoding/json"

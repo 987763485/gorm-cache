@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	cache "github.com/987763485/gorm-cache"
 	"github.com/987763485/gorm-cache/store/gormredis"
+	"github.com/987763485/gorm-cache/v1"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -17,7 +17,7 @@ var (
 
 	redisClient *redis.Client
 
-	cachePlugin *cache.Cache
+	cachePlugin *gormcache.Cache
 )
 
 func newDb() {
@@ -32,12 +32,12 @@ func newDb() {
 
 	redisClient = redis.NewClient(&redis.Options{Addr: ":6379"})
 
-	cacheConfig := &cache.Config{
+	cacheConfig := &gormcache.Config{
 		Store:      gormredis.NewWithDb(redisClient), // OR redis2.New(&redis.Options{Addr:"6379"})
-		Serializer: &cache.DefaultJSONSerializer{},
+		Serializer: &gormcache.DefaultJSONSerializer{},
 	}
 
-	cachePlugin = cache.New(cacheConfig)
+	cachePlugin = gormcache.New(cacheConfig)
 
 	if err = db.Use(cachePlugin); err != nil {
 		fmt.Println(err.Error())
@@ -48,7 +48,7 @@ func newDb() {
 func basic() {
 	var username string
 	ctx := context.Background()
-	ctx = cache.NewExpiration(ctx, time.Hour)
+	ctx = gormcache.NewExpiration(ctx, time.Hour)
 
 	db.Table("users").WithContext(ctx).Where("id = 1").Limit(1).Pluck("username", &username)
 	fmt.Println(username)
@@ -58,8 +58,8 @@ func basic() {
 func customKey() {
 	var nickname string
 	ctx := context.Background()
-	ctx = cache.NewExpiration(ctx, time.Hour)
-	ctx = cache.NewKey(ctx, "nickname")
+	ctx = gormcache.NewExpiration(ctx, time.Hour)
+	ctx = gormcache.NewKey(ctx, "nickname")
 
 	db.Table("users").WithContext(ctx).Where("id = 1").Limit(1).Pluck("nickname", &nickname)
 
@@ -70,8 +70,8 @@ func customKey() {
 func useTag() {
 	var nickname string
 	ctx := context.Background()
-	ctx = cache.NewExpiration(ctx, time.Hour)
-	ctx = cache.NewTag(ctx, "users")
+	ctx = gormcache.NewExpiration(ctx, time.Hour)
+	ctx = gormcache.NewTag(ctx, "users")
 
 	db.Table("users").WithContext(ctx).Where("id = 1").Limit(1).Pluck("nickname", &nickname)
 
