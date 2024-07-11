@@ -4,9 +4,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
-	"github.com/liyuan1125/gorm-cache"
-	redis2 "github.com/liyuan1125/gorm-cache/store/redis"
+	"github.com/go-redis/redis/v9"
+	"github.com/987763485/gorm-cache"
+	redis2 "github.com/987763485/gorm-cache/store/redis"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"os"
