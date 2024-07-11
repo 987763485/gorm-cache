@@ -1,4 +1,4 @@
-package redis2
+package gormredis
 
 import (
 	"context"

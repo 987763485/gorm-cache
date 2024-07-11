@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	cache "github.com/987763485/gorm-cache"
-	"github.com/987763485/gorm-cache/store/redis2"
+	"github.com/987763485/gorm-cache/store/gormredis"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -33,7 +33,7 @@ func newDb() {
 	redisClient = redis.NewClient(&redis.Options{Addr: ":6379"})
 
 	cacheConfig := &cache.Config{
-		Store:      redis2.NewWithDb(redisClient), // OR redis2.New(&redis.Options{Addr:"6379"})
+		Store:      gormredis.NewWithDb(redisClient), // OR redis2.New(&redis.Options{Addr:"6379"})
 		Serializer: &cache.DefaultJSONSerializer{},
 	}
 
